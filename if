@@ -1,0 +1,83 @@
+class Product:
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+
+class OrderItem:
+    def __init__(self, product, quantity):
+        self.product = product
+        self.quantity = quantity
+
+class Order:
+    def __init__(self, order_items):
+        self.order_items = order_items
+
+    def calculate_total(self):
+        total = 0
+        for item in self.order_items:
+            total += item.product.price * item.quantity
+        return total
+
+    def print_order(self):
+        print("订单详情：")
+        for item in self.order_items:
+            print(f"商品：{item.product.name}\t数量：{item.quantity}\t小计：{item.product.price * item.quantity}")
+        print(f"总计：{self.calculate_total()}")
+
+def add_order_item(products):
+    product_name = input("请输入商品名称：")
+    quantity = int(input("请输入商品数量："))
+    
+    product = None
+    for p in products:
+        if p.name == product_name:
+            product = p
+            break
+    
+    if product:
+        order_item = OrderItem(product, quantity)
+        return order_item
+    else:
+        print("找不到该商品。")
+        return None
+
+def create_order(products):
+    order_items = []
+    
+    while True:
+        order_item = add_order_item(products)
+        if order_item:
+            order_items.append(order_item)
+        
+        add_more = input("是否继续添加商品？(是/否) ").lower()
+        if add_more != "是":
+            break
+    
+    order = Order(order_items)
+    order.print_order()
+
+def main_menu():
+    products = [
+        Product("苹果", 5.0),
+        Product("香蕉", 3.0),
+        Product("橙子", 4.0),
+        Product("西瓜", 10.0),
+        Product("葡萄", 6.0)
+    ]
+    
+    while True:
+        print("订单管理系统")
+        print("1. 创建新订单")
+        print("2. 退出系统")
+        choice = input("请输入选项：")
+        
+        if choice == "1":
+            create_order(products)
+        elif choice == "2":
+            print("谢谢使用，再见！")
+            break
+        else:
+            print("无效的选项，请重新输入。")
+        print()
+
+main_menu()
